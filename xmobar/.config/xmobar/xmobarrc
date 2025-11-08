@@ -16,7 +16,7 @@ Config { lowerOnStart = True
                                    , "--highs", "<fc=#a6e3a1>Batt: <left>%</fc>"
                                    , "-A", "5", "-a", "notify-send -u critical 'Battery Low!!'"
                                    ] 600
-                    , Run Alsa "default" "Master" ["-t", "<status>"
+                    , Run Alsa "default" "Master" ["-t", "<action=`amixer sset Master 1%-` button=4><action=`amixer sset Master 1%+` button=5><status></action></action>"
                                                   ,"--"
                                                   ,"-O", "Vol: <volume>", "-o", "Vol: M"
                                                   ,"-C", "#f5bde6", "-c", "#ed8796"
