@@ -9,6 +9,8 @@ autoload -Uz compinit
 compinit
 
 source ~/.config/zsh-autosuggestions.zsh
+source /usr/share/fzf/key-bindings.zsh
+source /usr/share/fzf/completion.zsh
 
 alias sudo="sudo "
 alias ls="eza -l --group-directories-first"

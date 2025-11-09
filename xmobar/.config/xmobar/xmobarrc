@@ -23,9 +23,10 @@ Config { lowerOnStart = True
                                                   ]
                     , Run ComX "/home/parth/.config/xmobar/playerctl.sh" [] "" "mymusic" 10
                     , Run XMonadLog
+                    , Run ComX "/home/parth/.config/xmobar/stalonetray.sh" [] "" "stal" 10
                     ]
        , sepChar  = "%"
        , alignSep = "}{"
-       , template = "%XMonadLog% }{ %mymusic% %alsa:default:Master% | %battery% | %date% | "
+       , template = "%XMonadLog% }{ %mymusic% %alsa:default:Master% | %battery% | %date% |%stal% "
        }
 

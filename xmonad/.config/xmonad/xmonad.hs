@@ -1,15 +1,18 @@
 import XMonad
 import XMonad.ManageHook
 import qualified XMonad.StackSet as W
+import System.Exit
 
 import XMonad.Actions.ToggleFullFloat
 import XMonad.Actions.CycleWS
+import XMonad.Actions.Commands
 
 import XMonad.Util.EZConfig
 import XMonad.Util.Loggers
 import XMonad.Util.SpawnOnce
 import XMonad.Util.ClickableWorkspaces
 import XMonad.Util.NamedScratchpad
+import XMonad.Util.Dmenu (dmenu)
 
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.DynamicLog
@@ -32,6 +35,10 @@ myTerm = "alacritty --title term"
 
 myMenu :: String
 myMenu = "rofi -show combi -modes 'window,drun,run,combi'"
+
+
+myPowerMenu :: String
+myPowerMenu = "/home/parth/.config/rofi/powermenu.sh"
 
 main :: IO ()
 main = xmonad 
@@ -56,6 +63,7 @@ myConfig = def
     [ ("M-f"                     , withFocused toggleFullFloat                             )
     , ("M-p"                     , spawn       myMenu                                      )
     , ("M-S-<Return>"            , spawn       myTerm                                      )
+    , ("M-l"                     , spawn       "betterlockscreen -l blur"                  )
     , ("M-m k"                   , spawn       "playerctl -p spotify play-pause"           )
     , ("M-m j"                   , spawn       "playerctl -p spotify previous"             )
     , ("M-m l"                   , spawn       "playerctl -p spotify next"                 )
@@ -68,7 +76,7 @@ myConfig = def
 
     , ("M-m M-m"                 , namedScratchpadAction myScratchpads "spotify"           )
     , ("M-m m"                   , namedScratchpadAction myScratchpads "spotify"           )
-    , ("M-m r"                   , namedScratchpadAction myScratchpads "ranger"            )
+    , ("M-r"                     , namedScratchpadAction myScratchpads "ranger"            )
     , ("M-m h"                   , namedScratchpadAction myScratchpads "htop"              )
 
     , ("M-<Tab>"                 , toggleWS' ["NSP"]     )
@@ -76,16 +84,30 @@ myConfig = def
     , ("M-<Left>"                , prevWS                )
     , ("M-S-<Right>"             , shiftToNext >> nextWS )
     , ("M-S-<Left>"              , shiftToPrev >> prevWS )
+
+    , ("M-o"                     , spawn myPowerMenu     )
     ]
+
+
+myCommands :: X [(String, X ())]
+myCommands = do
+           return $ otherCommands
+      where
+           otherCommands = 
+                [ ("Log Out"       , io exitSuccess     )
+                , ("PowerOff"      , sendMessage Expand )
+                , ("Reboot"        , sendMessage Expand )
+                ]
 
 
 myScratchpads = [
                 NS "spotify" "spotify-launcher" (className =? "Spotify") myFloat,
-                NS "ranger" "alacritty --title ranger -e ranger" (title =? "ranger") myFloat,
+                NS "ranger" "alacritty --title ranger -e ranger" (title =? "ranger") bigFloat,
                 NS "htop" "alacritty --title htop -e htop" (title =? "htop") myFloat
                 ]
               where
-                myFloat = doRectFloat (W.RationalRect 0.1 0.1 0.8 0.8)
+                myFloat  = doRectFloat (W.RationalRect 0.1 0.1 0.8 0.8)
+                bigFloat = doRectFloat (W.RationalRect 0.025 0.075 0.95 0.88)
 
 
 myLayout = Tall 1 (3/100) (1/2) ||| Full
@@ -106,7 +128,9 @@ myManageHook = composeAll
 
 myStartupHook :: X ()
 myStartupHook = do
+  spawnOnce "copyq"
   spawnOnce "dunst"
+  spawnOnce "stalonetray"
   spawnOnce "xsetroot -cursor_name left_ptr"
 
 
