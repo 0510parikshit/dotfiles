@@ -117,6 +117,7 @@ myManageHook :: ManageHook
 myManageHook = composeAll
     [ className =? "Gimp"                                --> myFloat
     , className =? "mpv"                                 --> myFloat
+    , className =? "qBittorrent"                         --> myFloat
     , className =? "Pqiv"                                --> myFloat
     , className =? "Thunar"                              --> myFloat
     , isDialog                                           --> myFloat
