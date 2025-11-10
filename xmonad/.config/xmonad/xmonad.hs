@@ -115,16 +115,18 @@ myLayout = Tall 1 (3/100) (1/2) ||| Full
 
 myManageHook :: ManageHook
 myManageHook = composeAll
-    [ className =? "Gimp"                                --> myFloat
-    , className =? "mpv"                                 --> myFloat
-    , className =? "qBittorrent"                         --> myFloat
-    , className =? "Pqiv"                                --> myFloat
-    , className =? "Thunar"                              --> myFloat
-    , isDialog                                           --> myFloat
-    , (className =? "firefox" <&&> resource =? "Dialog") --> myFloat
+    [ className  =? "Gimp"                                --> myFloat
+    , className  =? "mpv"                                 --> myFloat
+    , className  =? "qBittorrent"                         --> myFloat
+    , className  =? "Pqiv"                                --> myFloat
+    , className  =? "Thunar"                              --> myFloat
+    , isDialog                                            --> myFloat
+    , (className =? "firefox" <&&> resource =? "Dialog")  --> myFloat
     ] <+> namedScratchpadManageHook myScratchpads
   where
-    myFloat = doRectFloat (W.RationalRect 0.1 0.1 0.8 0.8)
+    myFloat    = doRectFloat (W.RationalRect 0.1 0.1 0.8 0.8)
+    bigFloat   = doRectFloat (W.RationalRect 0.025 0.075 0.95 0.88)
+    smallFloat = doRectFloat (W.RationalRect 0.3 0.3 0.4 0.4)
 
 
 myStartupHook :: X ()
